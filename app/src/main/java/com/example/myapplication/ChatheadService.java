@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class ChatheadService extends Service {
 
@@ -45,6 +46,7 @@ public class ChatheadService extends Service {
         mWindowManager.addView(chathead, params);
 
         ImageView closeButtonCollapsed =  chathead.findViewById(R.id.image1);
+        TextView value =  chathead.findViewById(R.id.value);
         closeButtonCollapsed.setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
             private int initialY;
@@ -70,7 +72,7 @@ public class ChatheadService extends Service {
                         if(lastAction==MotionEvent.ACTION_DOWN) {
                             closeButtonCollapsed.setBackgroundResource(R.drawable.bg2);
                             Button button = new Button(ChatheadService.this);
-                            button.setText("close");
+                            button.setText("X");
                             RelativeLayout layout = chathead.findViewById(R.id.collapse_view);
                             layout.addView(button);
                             button.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +88,7 @@ public class ChatheadService extends Service {
 
                         if(event.getAction()==MotionEvent.ACTION_MOVE)
                         {
-                            closeButtonCollapsed.setBackgroundResource(R.drawable.ic_baseline_close_24);
+                            closeButtonCollapsed.setBackgroundResource(R.drawable.ic_baseline_circle_24);
                             params.x = initialX + (int) (event.getRawX() - initialTouchX);
                             params.y = initialY + (int) (event.getRawY() - initialTouchY);
 
@@ -101,20 +103,33 @@ public class ChatheadService extends Service {
             }
         });
 
-        closeButtonCollapsed.setOnLongClickListener(new View.OnLongClickListener() {
+        value.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                closeButtonCollapsed.setBackgroundResource(R.drawable.ic_baseline_close_24);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 return false;
             }
         });
     }
+
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         if(chathead !=null)
         {
+//            ImageView closeButtonCollapsed =  chathead.findViewById(R.id.image1);
+//            closeButtonCollapsed.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
+//                    Runtime.getRuntime().exit(0);
+//                }
+//            });
             mWindowManager.removeView(chathead);
         }
     }

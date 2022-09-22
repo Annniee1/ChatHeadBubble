@@ -30,25 +30,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showchathead();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (!Settings.canDrawOverlays(MainActivity.this)) {
+                        Intent localIntent = new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION");
+                        localIntent.setData(Uri.parse("package:" + getPackageName()));
+                        localIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(localIntent);
+                    }
+                }
+                else {
+                    showchathead();
+                }
             }
         });
-        showchathead();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                Intent localIntent = new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION");
-                localIntent.setData(Uri.parse("package:" + getPackageName()));
-                localIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(localIntent);
-            }
-        }
-        else {
-            showchathead();
-        }
+
 
     }
 
     private void showchathead() {
-        Toast.makeText(MainActivity.this,"Hello",Toast.LENGTH_LONG).show();
         startService(new Intent(MainActivity.this,ChatheadService.class));
     }
 
