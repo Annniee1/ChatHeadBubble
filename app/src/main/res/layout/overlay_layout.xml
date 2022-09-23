@@ -13,7 +13,7 @@
                 android:layout_width="60dp"
                 android:id="@+id/image1"
                 tools:ignore="ContentDescription"
-                android:background="@drawable/bg2"
+                android:background="@drawable/visibility"
                 android:layout_height="60dp"/>
 
     <TextView

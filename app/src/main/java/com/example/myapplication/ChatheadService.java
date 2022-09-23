@@ -99,7 +99,7 @@ public class ChatheadService extends Service {
                     {
                         //remember the initial position.
                         if(lastAction==MotionEvent.ACTION_DOWN) {
-                            closeButtonCollapsed.setBackgroundResource(R.drawable.bg2);
+                            closeButtonCollapsed.setBackgroundResource(R.drawable.visibility);
                             Button button = new Button(ChatheadService.this);
                             button.setText("X");
                             RelativeLayout layout = chathead.findViewById(R.id.collapse_view);
@@ -136,31 +136,6 @@ public class ChatheadService extends Service {
 
         long duration=TimeUnit.MINUTES.toMillis(1);
 
-//        for(int i=0;i<35;i++)
-//        {
-//            SystemClock.sleep(100);
-//            count+=2;
-//            String sduration= "00 : " + String.valueOf(i);
-//            if(sduration.equals("00 : 10"))
-//            {
-//                closeButtonCollapsed.setBackgroundResource(R.drawable.angle);
-//                texttochange.setText("Correct your orientation!");
-//            }
-//            if(sduration.equals("00 : 20"))
-//            {
-//                closeButtonCollapsed.setBackgroundResource(R.drawable.eyescan);
-//                texttochange.setText("You need to blink more!");
-//            }
-//            if(sduration.equals("00 : 30"))
-//            {
-//                closeButtonCollapsed.setBackgroundResource(R.drawable.detox);
-//                texttochange.setText("Move the mobile device away!");
-//            }
-//            value.setText(sduration);
-//        }
-
-
-
         new CountDownTimer(duration, 1000){
             public void onTick(long l){
 
@@ -170,7 +145,6 @@ public class ChatheadService extends Service {
                         -TimeUnit.MINUTES.toSeconds(
                                 TimeUnit.MILLISECONDS.toMinutes(l)+count));
                 count+=1;
-
                 if(count==10)
                 {
                     closeButtonCollapsed.setBackgroundResource(R.drawable.angle);
@@ -178,7 +152,7 @@ public class ChatheadService extends Service {
                 }
                 if(count==20)
                 {
-                    closeButtonCollapsed.setBackgroundResource(R.drawable.eyescan);
+                    closeButtonCollapsed.setBackgroundResource(R.drawable.blink);
                     texttochange.setText("You need to blink more!");
                 }
                 if(count==30)

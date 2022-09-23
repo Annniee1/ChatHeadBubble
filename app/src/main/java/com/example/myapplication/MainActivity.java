@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +39,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(localIntent);
             }
         }
+        Button button=findViewById(R.id.preview);
         Spinner spinnerLanguages=findViewById(R.id.spinner_languages);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spinnerLanguages.setVisibility(View.VISIBLE);
+                button.setVisibility(View.GONE);
+            }
+        });
+
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
