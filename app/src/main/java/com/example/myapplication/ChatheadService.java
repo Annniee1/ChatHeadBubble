@@ -1,9 +1,17 @@
 package com.example.myapplication;
 
 import android.app.Service;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Binder;
+import android.os.Bundle;
+
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,19 +21,41 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class ChatheadService extends Service {
 
     private WindowManager mWindowManager;
 
+    int count=0;
     private View chathead;
     public ChatheadService(){
 
     }
+    Context context;
+    Intent intent1;
+    String s1;
+    private IBinder binder=new Binder();
     @Override
     public IBinder onBind(Intent intent) {
+        intent1=intent;
+        s1 = intent1.getStringExtra("date");
         return null;
     }
+
+    Timer timer;
+    TimerTask timerTask;
+    Double time = 0.0;
+
+    String ans;
+    boolean timerStarted = false;
 
     @Override
     public void onCreate() {
@@ -41,12 +71,11 @@ public class ChatheadService extends Service {
         params.gravity= Gravity.TOP | Gravity.LEFT;
         params.x =0;
         params.y=100;
-
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(chathead, params);
-
         ImageView closeButtonCollapsed =  chathead.findViewById(R.id.image1);
         TextView value =  chathead.findViewById(R.id.value);
+        TextView texttochange =  chathead.findViewById(R.id.texttochange);
         closeButtonCollapsed.setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
             private int initialY;
@@ -88,7 +117,7 @@ public class ChatheadService extends Service {
 
                         if(event.getAction()==MotionEvent.ACTION_MOVE)
                         {
-                            closeButtonCollapsed.setBackgroundResource(R.drawable.ic_baseline_circle_24);
+//                            closeButtonCollapsed.setBackgroundResource(R.drawable.ic_baseline_circle_24);
                             params.x = initialX + (int) (event.getRawX() - initialTouchX);
                             params.y = initialY + (int) (event.getRawY() - initialTouchY);
 
@@ -103,6 +132,81 @@ public class ChatheadService extends Service {
             }
         });
 
+        timer = new Timer();
+
+        long duration=TimeUnit.MINUTES.toMillis(1);
+
+//        for(int i=0;i<35;i++)
+//        {
+//            SystemClock.sleep(100);
+//            count+=2;
+//            String sduration= "00 : " + String.valueOf(i);
+//            if(sduration.equals("00 : 10"))
+//            {
+//                closeButtonCollapsed.setBackgroundResource(R.drawable.angle);
+//                texttochange.setText("Correct your orientation!");
+//            }
+//            if(sduration.equals("00 : 20"))
+//            {
+//                closeButtonCollapsed.setBackgroundResource(R.drawable.eyescan);
+//                texttochange.setText("You need to blink more!");
+//            }
+//            if(sduration.equals("00 : 30"))
+//            {
+//                closeButtonCollapsed.setBackgroundResource(R.drawable.detox);
+//                texttochange.setText("Move the mobile device away!");
+//            }
+//            value.setText(sduration);
+//        }
+
+
+
+        new CountDownTimer(duration, 1000){
+            public void onTick(long l){
+
+                String sduration=String.format(Locale.ENGLISH,"%02d : %02d",
+                        TimeUnit.MILLISECONDS.toMinutes(l),
+                        TimeUnit.MILLISECONDS.toSeconds(l),
+                        -TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(l)+count));
+                count+=1;
+
+                if(count==10)
+                {
+                    closeButtonCollapsed.setBackgroundResource(R.drawable.angle);
+                    texttochange.setText("Correct your orientation!");
+                }
+                if(count==20)
+                {
+                    closeButtonCollapsed.setBackgroundResource(R.drawable.eyescan);
+                    texttochange.setText("You need to blink more!");
+                }
+                if(count==30)
+                {
+                    closeButtonCollapsed.setBackgroundResource(R.drawable.detox);
+                    texttochange.setText("Move the mobile device away!");
+                }
+                 if(count<10)
+                 {
+                     value.setText("00 : 0" +count);
+                 }
+                 else
+                 {
+                     value.setText("00 : " +count);
+                 }
+
+            }
+            public  void onFinish(){
+                value.setText("FINISH!!");
+            }
+        }.start();
+
+        closeButtonCollapsed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         value.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -120,17 +224,50 @@ public class ChatheadService extends Service {
         super.onDestroy();
         if(chathead !=null)
         {
-//            ImageView closeButtonCollapsed =  chathead.findViewById(R.id.image1);
-//            closeButtonCollapsed.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                    Runtime.getRuntime().exit(0);
-//                }
-//            });
+
             mWindowManager.removeView(chathead);
         }
+    }
+    public String getTimestamp(long timestamp) {
+
+        String time = "";
+
+        long difference = System.currentTimeMillis()-timestamp;
+
+        double days = Math.floor(difference / 1000 / 60 / 60 / 24);
+        difference -= days * 1000 * 60 * 60 * 24;
+
+        double hours = Math.floor(difference / 1000 / 60 / 60);
+        difference -= hours * 1000 * 60 * 60;
+
+        double minutes = Math.floor(difference / 1000 / 60);
+        difference -= minutes * 1000 * 60;
+
+        double seconds = Math.floor(difference / 1000);
+
+        if ((int) days > 1) {
+            time += String.valueOf((int)days) + " days ";
+        }
+        else if((int) days>0){
+            time += String.valueOf((int)days) + " day ";
+        }
+        else if ((int) hours > 1) {
+            time += String.valueOf((int)hours) + " hrs ";
+        }
+        else if ((int) hours > 0) {
+            time += String.valueOf((int)hours) + " hr ";
+        }
+        else if ((int) minutes > 1) {
+            time += String.valueOf((int)minutes) + " mins ";
+        }
+        else if ((int) minutes > 0) {
+            time += String.valueOf((int)minutes) + " min ";
+        }
+        else if ((int) seconds >= 0) {
+            time += String.valueOf((int)seconds) + " secs ";
+        }
+        time += "ago";
+
+        return time;
     }
 }
