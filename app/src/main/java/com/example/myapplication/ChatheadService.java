@@ -150,12 +150,22 @@ public class ChatheadService extends Service {
                     closeButtonCollapsed.setBackgroundResource(R.drawable.angle);
                     texttochange.setText("Correct your orientation!");
                 }
-                if(count==20)
+                if(count>=11 && count <15)
+                {
+                    closeButtonCollapsed.setBackgroundResource(R.drawable.visibility);
+                    texttochange.setText("");
+                }
+                if(count==15)
                 {
                     closeButtonCollapsed.setBackgroundResource(R.drawable.blink);
                     texttochange.setText("You need to blink more!");
                 }
-                if(count==30)
+                if(count>=16 && count <20)
+                {
+                    closeButtonCollapsed.setBackgroundResource(R.drawable.visibility);
+                    texttochange.setText("");
+                }
+                if(count==20)
                 {
                     closeButtonCollapsed.setBackgroundResource(R.drawable.detox);
                     texttochange.setText("Move the mobile device away!");
