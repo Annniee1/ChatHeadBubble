@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,9 @@ import java.util.Date;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView tv1, tv2, tv3;
+    private ImageView img1;
 
     public static final int Permission_code=1;
     @Override
@@ -39,15 +43,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(localIntent);
             }
         }
-        Button button=findViewById(R.id.preview);
+//        Button button=findViewById(R.id.preview);
+        tv1 = findViewById(R.id.tv1);
+        tv2 = findViewById(R.id.tv3);
+        tv3 = findViewById(R.id.tv4);
+
+        img1 = findViewById(R.id.img1);
+
         Spinner spinnerLanguages=findViewById(R.id.spinner_languages);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                spinnerLanguages.setVisibility(View.VISIBLE);
-                button.setVisibility(View.GONE);
-            }
-        });
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                spinnerLanguages.setVisibility(View.VISIBLE);
+//                button.setVisibility(View.GONE);
+//            }
+//        });
 
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.languages, android.R.layout.simple_spinner_item);
 

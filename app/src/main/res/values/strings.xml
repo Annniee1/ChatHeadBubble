@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">dropDownMenuExample</string>
+    <string name="app_name">i-Fit</string>
     <string-array name="languages">
-        <item>Eye blink</item>
-        <item>Eye orientation</item>
-        <item> Distance from screen</item>
+        <item>Eye Blink</item>
+        <item>Eye Orientation</item>
+        <item> Distance from Screen</item>
     </string-array>
 </resources>
